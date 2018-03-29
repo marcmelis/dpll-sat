@@ -1,2 +1,2 @@
 # satsolver_practice
-Simple SAT Solver. 
+Simple COMPLETE SAT Solver.

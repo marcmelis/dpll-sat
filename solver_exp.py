@@ -105,28 +105,28 @@ def most_often_selection(formula):
     return most_often_var
 
 
-# wip
-'''
+
 def jeroslow_wang(formula):
-    counter = {}
-    for clause in formula:
-        for literal in clause:
-            if abs(literal) in counter:
-                counter[abs(literal)] += 2 ** len(clause)
-            else:
-                counter[abs(literal)] = 2 ** len(clause)
-    least_often_value = max(counter.values())
-    counter_list = counter.items()
-    for item in counter_list:
-        if item[1] <= least_often_value:
-            least_often_key = item[0]
-    return least_often_key
-'''
+    best_literal = 0
+    best_jw_cost = 0
+    for literal in xrange(formula.n_vars):
+        cost = 0
+        # Clauses with the positive literal
+        for clause in formula.linked[literal]:
+            cost += 2 ** -len(clause)
+        # Clauses with the negative literal
+        for clause in formula.lnked[literal + formula.n_vars]:
+            cost += 2 ** -len(clause)
+        if cost > best_jw_cost:
+            best_jw_cost = cost
+            best_literal = literal + 1
+    return best_literal
 
 
 def backtracking(formula, selection_function=most_often_selection):
-    formula = pure_literal(formula)
+    #formula = pure_literal(formula)
     formula = unit_propagation(formula)
+
 
     if formula.has_contradiction():
         return None

@@ -66,15 +66,14 @@ def bcp(formula, unit):
 
 
 def pure_literal(formula):
-    pures = []  # [ x for x,y in counter.items() if -x not in counter ]
+    pures = []
     for literal in xrange(formula.n_vars):
-        # NOT IMPLEMENTED TRUE FALSE
         p_lit = len(formula.linked[literal])
         n_lit = len(formula.linked[literal + formula.n_vars])
-        if p_lit == 0 and n_lit is not 0:
-            pures.append(n_lit)
-        elif p_lit is not 0 and n_lit == 0:
-            pures.append(p_lit)
+        if p_lit == 0 and not 0 == n_lit:
+            pures.append(literal)
+        elif not p_lit == 0 and n_lit == 0:
+            pures.append(-literal)
     for pure in pures:
         formula = bcp(formula, pure)
     formula.assignment += pures
@@ -93,7 +92,6 @@ def unit_propagation(formula):
     return formula
 
 
-# regular heuristic
 def most_often_selection(formula):
     max = 0
     most_often_var = 1
@@ -107,7 +105,7 @@ def most_often_selection(formula):
     return most_often_var
 
 
-# wip, best heuristic
+# wip
 '''
 def jeroslow_wang(formula):
     counter = {}
@@ -148,7 +146,6 @@ def backtracking(formula, selection_function=most_often_selection):
     return solution
 
 
-# wip
 def main():
     formula = parse(sys.argv[1])
     solution = backtracking(formula)

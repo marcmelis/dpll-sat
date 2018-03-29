@@ -65,6 +65,7 @@ def bcp(formula, unit):
     return modified
 
 
+# wip
 def pure_literal(formula):
     pures = []
     for literal in xrange(formula.n_vars):
@@ -105,8 +106,21 @@ def most_often_selection(formula):
     return most_often_var
 
 
+def shortest_positive_clause(formula):
+    shortest_len = sys.maxint
+    best_clause = []
+    for clause in formula.list:
+        if all(literal > 0 for literal in clause):
+            if len(clause) < shortest_len:
+                shortest_len = len(clause)
+                best_clause = clause
+    if best_clause:
+        return best_clause[0]
+    else:
+        return two_sided_jeroslow_wang(formula)
 
-def jeroslow_wang(formula):
+
+def two_sided_jeroslow_wang(formula):
     best_literal = 0
     best_jw_cost = 0
     for literal in xrange(formula.n_vars):
@@ -115,7 +129,7 @@ def jeroslow_wang(formula):
         for clause in formula.linked[literal]:
             cost += 2 ** -len(clause)
         # Clauses with the negative literal
-        for clause in formula.lnked[literal + formula.n_vars]:
+        for clause in formula.linked[literal + formula.n_vars]:
             cost += 2 ** -len(clause)
         if cost > best_jw_cost:
             best_jw_cost = cost
@@ -123,10 +137,9 @@ def jeroslow_wang(formula):
     return best_literal
 
 
-def backtracking(formula, selection_function=most_often_selection):
-    #formula = pure_literal(formula)
+def backtracking(formula, selection_function=two_sided_jeroslow_wang):
+    # formula = pure_literal(formula)
     formula = unit_propagation(formula)
-
 
     if formula.has_contradiction():
         return None
@@ -136,19 +149,18 @@ def backtracking(formula, selection_function=most_often_selection):
     variable = selection_function(formula)
     new_formula = bcp(formula, variable)
     new_formula.assignment.append(variable)
-    solution = backtracking(new_formula)
+    solution = backtracking(new_formula, selection_function)
 
     if not solution:
         new_formula = bcp(formula, -variable)
         new_formula.assignment.append(-variable)
-        solution = backtracking(new_formula)
-
+        solution = backtracking(new_formula, selection_function)
     return solution
 
 
 def main():
     formula = parse(sys.argv[1])
-    solution = backtracking(formula)
+    solution = backtracking(formula, two_sided_jeroslow_wang)
     if solution:
         solution += [x for x in range(1, formula.n_vars + 1) if x not in solution and -x not in solution]
         solution.sort(key=lambda x: abs(x))

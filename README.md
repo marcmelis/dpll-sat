@@ -1,7 +1,7 @@
 # satsolver_practice
 Simple COMPLETE SAT Solver.
 
-##Solvers
+## Solvers
 
 ```
 python <solver_name> <formula_to_solve>
@@ -10,7 +10,7 @@ Solvers list:
 * solver_exp.py : experimental solver
 * original_dpll.py : base solver
 
-##Formula generator
+## Formula generator
 
 
 CNF formula generator, [DIMACS format].
@@ -19,7 +19,7 @@ CNF formula generator, [DIMACS format].
 python rnd_cnf_gen.py <num_vars> <num_clauses> <clauses_length> [<seed>] [ > file ]
 ```
 
-##Solution validator
+## Solution validator
 
 Validator for SATISFIABLE formulas,[DIMACS format]. 
 

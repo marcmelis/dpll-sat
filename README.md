@@ -21,7 +21,7 @@ python rnd_cnf_gen.py <num_vars> <num_clauses> <clauses_length> [<seed>] [ > fil
 
 ## Solution validator
 
-Validator for SATISFIABLE formulas,[DIMACS format]. 
+Validator for SATISFIABLE formulas, [DIMACS format]. 
 
 ```
 python sat_val.py <formula> <solution>

@@ -108,7 +108,8 @@ def heuristics_dict(heuristic):
     dict = {
         'JW' : jeroslow_wang,
         'RAN': random_selection,
-        'MO' : most_often
+        'MO' : most_often,
+        'SPC': shortest_positive_clause
     }
     try:
         return dict[heuristic]
@@ -130,6 +131,17 @@ def most_often(formula):
     counter = get_counter(formula)
     return max(counter, key=counter.get)
 
+def shortest_positive_clause(formula):
+    min_len =  sys.maxint
+    best_literal = 0
+    for clause in formula:
+        negatives = sum(1 for literal in clause if literal < 0)
+        if not negatives and len(clause) < min_len:
+            best_literal = clause[0]
+            min_len = len(clause)
+    if not best_literal:
+        return formula[0][0]
+    return best_literal
 
 # Main
 

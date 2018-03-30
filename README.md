@@ -7,8 +7,9 @@ Simple COMPLETE SAT Solver.
 python <solver_name> <formula_to_solve>
 ```
 Solvers list:
-* solver_exp.py : experimental solver
+* solver_exp.py : experimental solver (too slow)
 * original_dpll.py : base solver
+* elcapo_sat.py : fast solver with more branching heuristics
 
 ## Formula generator
 

@@ -4,8 +4,11 @@ Simple COMPLETE SAT Solver.
 ## Solvers
 
 ```
-python <solver_name> <formula_to_solve>
+python <solver_name> <formula_to_solve> *[<branching_heuristic>]
 ```
+\**only for elcapo_sat.py*
+
+
 Solvers list:
 * solver_exp.py : experimental solver (too slow)
 * original_dpll.py : base solver

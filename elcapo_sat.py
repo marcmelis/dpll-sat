@@ -61,7 +61,7 @@ def get_jw_counter(formula):
 def pure_literal(formula):
     counter = get_counter(formula)
     assignment = []
-    pures = []  # [ x for x,y in counter.items() if -x not in counter ]
+    pures = []
     for literal, _ in counter.items():
         if -literal not in counter:
             pures.append(literal)
@@ -104,6 +104,19 @@ def backtracking(formula, assignment, heuristic):
 
 # Branching heuristics
 
+def heuristics_dict(heuristic):
+    dict = {
+        'JW' : jeroslow_wang,
+        'RAN': random_selection,
+        'MO' : most_often
+    }
+    try:
+        return dict[heuristic]
+    except:
+        sys.exit("ERROR: '{}' Not valid heuristic.".format(heuristic) +
+                 "\nValid heuristics: {}".format(dict.keys()))
+
+
 def random_selection(formula):
     counter = get_counter(formula)
     return random.choice(counter.keys())
@@ -114,7 +127,7 @@ def jeroslow_wang(formula):
     return max(counter, key=counter.get)
 
 def most_often(formula):
-	counter = get_counter(formula)
+    counter = get_counter(formula)
     return max(counter, key=counter.get)
 
 
@@ -122,12 +135,17 @@ def most_often(formula):
 
 def main():
 
-    if not len(sys.argv) == 2:
-        sys.exit("Use: %s <cnf_file>" % sys.argv[0])
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        sys.exit("Use: %s <cnf_file> [<branching_heuristic>]" % sys.argv[0])
+
+    if len(sys.argv) == 3:
+        heuristic = heuristics_dict(sys.argv[2])
+    else:
+        heuristic = jeroslow_wang
 
     clauses, n_vars = parse(sys.argv[1])
 
-    solution = backtracking(clauses, [], JW)
+    solution = backtracking(clauses, [], heuristic)
 
     if solution:
         solution += [x for x in range(1, n_vars + 1) if x not in solution and -x not in solution]
@@ -139,6 +157,4 @@ def main():
 
 
 if __name__ == '__main__':
-    JW = jeroslow_wang
-    RAN = random_selection
     main()

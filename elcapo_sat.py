@@ -113,6 +113,10 @@ def jeroslow_wang(formula):
     counter = get_jw_counter(formula)
     return max(counter, key=counter.get)
 
+def most_often(formula):
+	counter = get_counter(formula)
+    return max(counter, key=counter.get)
+
 
 # Main
 

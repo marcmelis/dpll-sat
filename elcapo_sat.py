@@ -87,6 +87,7 @@ def unit_propagation(formula):
 
 
 def backtracking(formula, assignment, heuristic):
+    # print assignment
     formula, pure_assignment = pure_literal(formula)
     formula, unit_assignment = unit_propagation(formula)
     assignment = assignment + pure_assignment + unit_assignment
@@ -105,17 +106,19 @@ def backtracking(formula, assignment, heuristic):
 # Branching heuristics
 
 def heuristics_dict(heuristic):
-    dict = {
-        'JW' : jeroslow_wang,
+    heuristics = {
+        'JW': jeroslow_wang,
         'RAN': random_selection,
-        'MO' : most_often,
-        'SPC': shortest_positive_clause
+        'MO': most_often,
+        'SPC': shortest_positive_clause,
+        'ZM': zabih_mcallester,
+        'FRE': freeman
     }
     try:
-        return dict[heuristic]
+        return heuristics[heuristic]
     except:
         sys.exit("ERROR: '{}' Not valid heuristic.".format(heuristic) +
-                 "\nValid heuristics: {}".format(dict.keys()))
+                 "\nValid heuristics: {}".format(heuristics.keys()))
 
 
 def random_selection(formula):
@@ -127,12 +130,14 @@ def jeroslow_wang(formula):
     counter = get_jw_counter(formula)
     return max(counter, key=counter.get)
 
+
 def most_often(formula):
     counter = get_counter(formula)
     return max(counter, key=counter.get)
 
+
 def shortest_positive_clause(formula):
-    min_len =  sys.maxint
+    min_len = sys.maxint
     best_literal = 0
     for clause in formula:
         negatives = sum(1 for literal in clause if literal < 0)
@@ -143,10 +148,32 @@ def shortest_positive_clause(formula):
         return formula[0][0]
     return best_literal
 
+
+def zabih_mcallester(formula):
+    counter = get_counter(formula)
+    return -(min(counter, key=counter.get))
+
+
+def freeman(formula):
+    counter = get_counter(formula)
+    max_difference = 0
+    best_literal = formula[0][0]
+    for literal in counter:
+        if not -literal in counter:
+            n_literal = 0
+        else:
+            n_literal = counter[-literal]
+        difference = counter[literal] - n_literal
+        if difference > max_difference:
+            max_difference = difference
+            best_literal = literal
+
+    return best_literal
+
+
 # Main
 
 def main():
-
     if len(sys.argv) < 2 or len(sys.argv) > 3:
         sys.exit("Use: %s <cnf_file> [<branching_heuristic>]" % sys.argv[0])
 

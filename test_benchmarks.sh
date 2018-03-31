@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if [[ $# -ne 3 ]]; then
-    echo "Usage: $0 <solver> <heuristic> <benchmark_folder>"
+if [[ $# -ne 2 ]] && [[ $# -ne 3 ]]; then
+    echo "Usage: $0 <benchmark_folder> <solver> [<heuristic>]"
     exit
 fi
-solver=$1
-heuristic=$2
-benchmark_folder=$3
+solver=$2
+heuristic=$3
+benchmark_folder=$1
 TIMEFORMAT=%R
 time_count=0
 loops=0

@@ -20,7 +20,8 @@ Solvers list:
 * **FRE** (Freeman) : counts both the number of positive l and negative -l occurrences of a given variable l.
 * **RAN** (Random) : random selection
 * **MO** (Most often) : counts the occurrences of each l literal
-* **JW** (Jeroslow Wang) : let C be the set of open clauses containing either polarity of a given variable l. Then to the given variable l a weight of the summation of 2^(length of c) for each c ∈ C.
+* **JW** (Jeroslow Wang) : let C be the set of open clauses containing a single polarity of a given variable l. Then to the given variable l a weight of the summation of 2^(length of c) for each c ∈ C.
+* **JW2S** (2 sided Jeroslow Wang) : Jeroslow Wang but C contains either polarity of a given variable.
 * **SPC** (Shortest Positive Clause) : searches for the shortest clause with all literals positive.
 
 ## Formula generator
@@ -41,3 +42,8 @@ python sat_val.py <formula> <solution>
 ```
 
 [DIMACS format]: http://www.satcompetition.org/2004/format-solvers2004.html
+
+## References
+
+* An Overview of the MOMs Heuristics - http://www.cs.toronto.edu/~stefan/publications/classes/cse573/sat.ps
+* Branching Rules for Satisfiability - http://repository.cmu.edu/cgi/viewcontent.cgi?article=1196&context=tepper 

@@ -57,6 +57,16 @@ def get_jw_counter(formula):
                 counter[literal] = 2 ** -len(clause)
     return counter
 
+def get_jw_abs_counter(formula):
+    counter = {}
+    for clause in formula:
+        for literal in clause:
+            literal = abs(literal)
+            if literal in counter:
+                counter[literal] += 2 ** -len(clause)
+            else:
+                counter[literal] = 2 ** -len(clause)
+    return counter
 
 def pure_literal(formula):
     counter = get_counter(formula)
@@ -107,12 +117,13 @@ def backtracking(formula, assignment, heuristic):
 
 def heuristics_dict(heuristic):
     heuristics = {
-        'JW': jeroslow_wang,
-        'RAN': random_selection,
-        'MO': most_often,
-        'SPC': shortest_positive_clause,
-        'ZM': zabih_mcallester,
-        'FRE': freeman
+        'JW'    : jeroslow_wang,
+        'RAN'   : random_selection,
+        'MO'    : most_often,
+        'SPC'   : shortest_positive_clause,
+        'ZM'    : zabih_mcallester,
+        'FRE'   : freeman,
+        'JW2S'  : jeroslow_wang_2_sided
     }
     try:
         return heuristics[heuristic]
@@ -128,6 +139,10 @@ def random_selection(formula):
 
 def jeroslow_wang(formula):
     counter = get_jw_counter(formula)
+    return max(counter, key=counter.get)
+
+def jeroslow_wang_2_sided(formula):
+    counter = get_jw_abs_counter(formula)
     return max(counter, key=counter.get)
 
 

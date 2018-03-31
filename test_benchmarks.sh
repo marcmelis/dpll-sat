@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ $# -ne 2 ]] && [[ $# -ne 3 ]]; then
-    echo "Usage: $0 <benchmark_folder> <solver> [<heuristic>]"
+    echo "Usage: $0 <benchmark_subfolder> <solver> [<heuristic>]"
     exit
 fi
 solver=$2

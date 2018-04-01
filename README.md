@@ -38,7 +38,7 @@ $ python rnd_cnf_gen.py <num_vars> <num_clauses> <clauses_length> [<seed>] [ > f
 Test a folder of CNF formulas and get the average time with a solver and heuristic.
 
 ```
-$ ./test_benchmarks.sh <benchmark_sfolder> <solver_name> *[<heurisitc>]
+$ ./test_benchmarks.sh <benchmark_folder> <solver_name> *[<heurisitc>]
 ```
 \**only for elcapo_sat.py*
 

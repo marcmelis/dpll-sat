@@ -57,8 +57,3 @@ $ python sat_val.py <formula> <solution>
 ```
 
 [DIMACS format]: http://www.satcompetition.org/2004/format-solvers2004.html
-
-## References
-
-* An Overview of the MOMs Heuristics - http://www.cs.toronto.edu/~stefan/publications/classes/cse573/sat.ps
-* Branching Rules for Satisfiability - http://repository.cmu.edu/cgi/viewcontent.cgi?article=1196&context=tepper 

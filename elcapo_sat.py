@@ -68,6 +68,22 @@ def get_jw_abs_counter(formula):
                 counter[literal] = 2 ** -len(clause)
     return counter
 
+def get_difference_counter(formula):
+    counter = {}
+    for clause in formula:
+        for literal in clause:
+            if literal in counter:
+                if literal > 0:
+                    counter[literal] += 1
+                else:
+                    counter[-literal] += - 1
+            else:
+                if literal > 0:
+                    counter[literal] = 1
+                else:
+                    counter[-literal] = - 1
+    return counter
+
 def pure_literal(formula):
     counter = get_counter(formula)
     assignment = []
@@ -170,21 +186,12 @@ def zabih_mcallester(formula):
 
 
 def freeman(formula):
-    counter = get_counter(formula)
-    max_difference = 0
-    best_literal = formula[0][0]
-    for literal in counter:
-        if not -literal in counter:
-            n_literal = 0
-        else:
-            n_literal = counter[-literal]
-        difference = counter[literal] - n_literal
-        if difference > max_difference:
-            max_difference = difference
-            best_literal = literal
-
-    return best_literal
-
+    counter = get_difference_counter(formula)
+    max_p_literal = max(counter, key=counter.get)
+    max_n_literal = min(counter, key=counter.get)
+    if max_p_literal >= abs(max_n_literal):
+        return max_p_literal
+    return max_n_literal
 
 # Main
 

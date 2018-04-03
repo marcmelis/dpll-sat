@@ -189,7 +189,7 @@ def freeman(formula):
     counter = get_difference_counter(formula)
     max_p_literal = max(counter, key=counter.get)
     max_n_literal = min(counter, key=counter.get)
-    if max_p_literal >= abs(max_n_literal):
+    if counter[max_p_literal] >= abs(counter[max_n_literal]):
         return max_p_literal
     return max_n_literal
 

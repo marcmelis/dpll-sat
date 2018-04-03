@@ -4,6 +4,11 @@ if [[ $# -ne 2 ]] && [[ $# -ne 3 ]]; then
     echo "Usage: $0 <benchmark_folder> <solver> [<heuristic>]"
     exit
 fi
+if [ ! -d $1 ]; then
+    echo "$1 is not a directory"
+    echo "Usage: $0 <benchmark_folder> <solver> [<heuristic>]"
+    exit
+fi
 solver=$2
 heuristic=$3
 benchmark_folder=$1

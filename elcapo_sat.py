@@ -137,7 +137,6 @@ def heuristics_dict(heuristic):
         'RAN'   : random_selection,
         'MO'    : most_often,
         'SPC'   : shortest_positive_clause,
-        'ZM'    : zabih_mcallester,
         'FRE'   : freeman,
         'JW2S'  : jeroslow_wang_2_sided
     }
@@ -179,12 +178,6 @@ def shortest_positive_clause(formula):
         return formula[0][0]
     return best_literal
 
-
-def zabih_mcallester(formula):
-    counter = get_counter(formula)
-    return -(min(counter, key=counter.get))
-
-
 def freeman(formula):
     counter = get_difference_counter(formula)
     max_p_literal = max(counter, key=counter.get)
@@ -215,7 +208,6 @@ def main():
         print 'v ' + ' '.join([str(x) for x in solution]) + ' 0'
     else:
         print 's UNSATISFIABLE'
-
 
 if __name__ == '__main__':
     main()

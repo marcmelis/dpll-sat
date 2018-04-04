@@ -6,15 +6,15 @@ Simple COMPLETE SAT Solver.
 ```
 $ python <solver_name> <formula_to_solve> *[<branching_heuristic>]
 ```
-\**only for elcapo_sat.py*
+\**only for base_sat.py*
 
 
 Solvers list:
-* solver_exp.py : experimental solver (too slow)
-* original_dpll.py : base solver
-* elcapo_sat.py : fast solver with more branching heuristics
+* solver_exp.py : experimental solver (too slow and not working)
+* original_dpll.py : base solver, random selection
+* base_sat.py : fast solver with more branching heuristics
 
-### elcapo_sat branching heuristics
+### base_sat branching heuristics
 * **FRE** *(Freeman) : counts both the number of positive l and negative -l occurrences of a given variable l.
 * **RAN** (Random) : random selection
 * **MO** (Most often) : counts the occurrences of each l literal
@@ -39,12 +39,12 @@ Test a folder of CNF formulas and get the average time with a solver and heurist
 ```
 $ ./test_benchmarks.sh <benchmark_folder> <solver_name> *[<heurisitc>]
 ```
-\**only for elcapo_sat.py*
+\**only for base_sat.py*
 
 Example:
 ```
 $ chmod +x test_benchmarks.sh
-$ ./test_benchmarks.sh jnh elcapo_sat.py JW2S
+$ ./test_benchmarks.sh benchmark/dubois base_sat.py JW2S
 ```
 
 ## Solution validator

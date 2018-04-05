@@ -71,9 +71,9 @@ def backtracking(formula, assignment):
         return assignment
 
     variable = jeroslow_wang_2_sided(formula)
-    solution = backtracking(bcp(formula, variable), assignment + [variable], heuristic)
+    solution = backtracking(bcp(formula, variable), assignment + [variable])
     if not solution:
-        solution = backtracking(bcp(formula, -variable), assignment + [-variable], heuristic)
+        solution = backtracking(bcp(formula, -variable), assignment + [-variable])
 
     return solution
 

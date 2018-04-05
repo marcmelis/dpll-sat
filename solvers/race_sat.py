@@ -91,6 +91,7 @@ def jeroslow_wang_2_sided(formula):
 def main():
 
     clauses, n_vars = parse(sys.argv[1])
+
     solution = backtracking(clauses, [])
 
     if solution:

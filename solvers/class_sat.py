@@ -4,7 +4,8 @@
 	Course in Advanced Programming in Artificial Intelligence - UdL
 '''
 
-import sys, copy
+import copy
+import sys
 
 
 class Formula(object):

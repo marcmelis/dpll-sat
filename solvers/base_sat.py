@@ -47,25 +47,26 @@ def get_counter(formula):
     return counter
 
 
-def get_jw_counter(formula):
+def get_weighted_counter(formula, weight=2):
     counter = {}
     for clause in formula:
         for literal in clause:
             if literal in counter:
-                counter[literal] += 2 ** -len(clause)
+                counter[literal] += weight ** -len(clause)
             else:
-                counter[literal] = 2 ** -len(clause)
+                counter[literal] = weight ** -len(clause)
     return counter
 
-def get_jw_abs_counter(formula):
+
+def get_weighted_abs_counter(formula, weight=2):
     counter = {}
     for clause in formula:
         for literal in clause:
             literal = abs(literal)
             if literal in counter:
-                counter[literal] += 2 ** -len(clause)
+                counter[literal] += weight ** -len(clause)
             else:
-                counter[literal] = 2 ** -len(clause)
+                counter[literal] = weight ** -len(clause)
     return counter
 
 def get_difference_counter(formula):
@@ -114,9 +115,9 @@ def unit_propagation(formula):
 
 def backtracking(formula, assignment, heuristic):
     # print assignment
-    formula, pure_assignment = pure_literal(formula)
+    # formula, pure_assignment = pure_literal(formula)
     formula, unit_assignment = unit_propagation(formula)
-    assignment = assignment + pure_assignment + unit_assignment
+    assignment = assignment + unit_assignment # + pure_assignment
     if formula == - 1:
         return []
     if not formula:
@@ -126,6 +127,7 @@ def backtracking(formula, assignment, heuristic):
     solution = backtracking(bcp(formula, variable), assignment + [variable], heuristic)
     if not solution:
         solution = backtracking(bcp(formula, -variable), assignment + [-variable], heuristic)
+
     return solution
 
 
@@ -153,13 +155,12 @@ def random_selection(formula):
 
 
 def jeroslow_wang(formula):
-    counter = get_jw_counter(formula)
+    counter = get_weighted_counter(formula)
     return max(counter, key=counter.get)
 
 def jeroslow_wang_2_sided(formula):
-    counter = get_jw_abs_counter(formula)
+    counter = get_weighted_abs_counter(formula)
     return max(counter, key=counter.get)
-
 
 def most_often(formula):
     counter = get_counter(formula)
@@ -185,6 +186,11 @@ def freeman(formula):
     if counter[max_p_literal] >= abs(counter[max_n_literal]):
         return max_p_literal
     return max_n_literal
+
+def max_key_value(counter):
+    keys = counter.keys()
+    values = counter.values()
+    return keys[values.index(max(values))]
 
 # Main
 

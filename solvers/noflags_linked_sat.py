@@ -25,23 +25,31 @@ class Formula(object):
 
         self.assignment = []
         self.has_contradiction = False
+
         for clause in self.simple:
             for literal in clause:
                 if literal in self.linked:
                     self.linked[literal].append(clause)
                 else:
                     self.linked[literal] = [clause]
+
+        for literal in xrange(1,n_vars +1):
+            if literal not in self.linked:
+                self.linked[literal] = []
+            if -literal not in self.linked:
+                self.linked[-literal] = []
+
+
     def solution_found(self):
         return True if not sum(1 for l in self.simple if l) else False
 
     def restore(self):
-        if not self.solution_found():
-            unit_modified = self.modified.pop()
-            # Undo the last modifications
-            for clause, variable in unit_modified:
-                clause.append(variable)
-            # Undo the last assignment
-            return self.assignment.pop()
+        unit_modified = self.modified.pop()
+        # Undo the last modifications
+        for clause, variable in unit_modified:
+            clause.append(variable)
+        # Undo the last assignment
+        return self.assignment.pop()
 
 
 def parse(filename):
@@ -85,10 +93,10 @@ def get_weighted_counter(linked,weight=2):
     for literal in linked:
         for clause in linked[literal]:
             if literal in clause:
-                if literal in counter:
-                    counter[literal] += weight ** - len(clause)
+                if abs(literal) in counter:
+                    counter[abs(literal)] += weight ** - len(clause)
                 else:
-                    counter[literal] = weight ** - len(clause)
+                    counter[abs(literal)] = weight ** - len(clause)
     return counter
 
 
@@ -106,7 +114,7 @@ def unit_propagation(formula):
     return
 
 
-def backtracking(formula, selection_heuristic):
+def backtracking(formula):
 
     unit_propagation(formula)
 
@@ -119,43 +127,31 @@ def backtracking(formula, selection_heuristic):
     if formula.solution_found():
         return formula.assignment
 
-    variable = selection_heuristic(formula)
+    variable = jeroslow_wang_2_sided(formula)
 
     bcp(formula, variable)
 
     formula.assignment.append(variable)
-    backtracking(formula, selection_heuristic)
-
-    formula.restore()
-    for _ in xrange(formula.extra_restores):
-        formula.restore()
-    formula.extra_restores = 0
-
+    backtracking(formula)
     if not formula.solution_found():
-        bcp(formula, -variable)
-        formula.assignment.append(-variable)
-        backtracking(formula, selection_heuristic)
         formula.restore()
         for _ in xrange(formula.extra_restores):
             formula.restore()
         formula.extra_restores = 0
+
+    if not formula.solution_found():
+        bcp(formula, -variable)
+        formula.assignment.append(-variable)
+        backtracking(formula)
+        if not formula.solution_found():
+            formula.restore()
+            for _ in xrange(formula.extra_restores):
+                formula.restore()
+            formula.extra_restores = 0
     return formula.assignment
 
 
-# Branching heuristics
-
-def heuristics_dict(heuristic):
-    heuristics = {
-        'JW'    : jeroslow_wang,
-    }
-    try:
-        return heuristics[heuristic]
-    except:
-        sys.exit("ERROR: '{}' Not valid heuristic.".format(heuristic) +
-                 "\nValid heuristics: {}".format(heuristics.keys()))
-
-
-def jeroslow_wang(formula):
+def jeroslow_wang_2_sided(formula):
     counter = get_weighted_counter(formula.linked)
     return max(counter, key=counter.get)
 
@@ -163,12 +159,10 @@ def jeroslow_wang(formula):
 
 def main():
 
-    if len(sys.argv) != 2:
-        sys.exit("Use: %s <cnf_file>" % sys.argv[0])
 
-    formula = parse(sys.argv[1])
-
-    solution = backtracking(formula, jeroslow_wang)
+    #formula = parse(sys.argv[1])
+    formula = parse("../benchmarks/hard/all/CBS_k3_n100_m429_b90_891.cnf")
+    solution = backtracking(formula)
 
     if solution:
         solution += [x for x in range(1, formula.n_vars + 1) if x not in solution and -x not in solution]

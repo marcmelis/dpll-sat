@@ -4,7 +4,6 @@
 	Course in Advanced Programming in Artificial Intelligence - UdL
 '''
 
-import random
 import sys
 
 
@@ -35,6 +34,14 @@ class Formula(object):
                     self.linked[literal].append(clause)
                 else:
                     self.linked[literal] = [clause]
+        # wip
+        '''
+        for literal in xrange(1, n_vars + 1):
+            if literal not in self.linked:
+                self.linked[literal] = [[[], False]]
+            if -literal not in self.linked:
+                self.linked[-literal] = [[[], False]]
+        '''
 
     def solution_found(self):
         return True if not len(self.active_clauses()) else False
@@ -59,6 +66,7 @@ class Formula(object):
             # Undo the last assignment
             return self.assignment.pop()
 
+
 def parse(filename):
     clauses = []
     for line in open(filename):
@@ -77,10 +85,11 @@ def bcp(formula, unit):
     formula.false_flags.append([])
 
     for clause in Formula.filter_active_clauses(formula.linked[unit]):
-
         clause[1] = False
         formula.false_flags[-1].append(clause)
+
     if -unit in formula.linked:
+
         for clause in Formula.filter_active_clauses(formula.linked[-unit]):
 
             formula.modified[-1].append([clause, -unit])
@@ -92,6 +101,7 @@ def bcp(formula, unit):
 
     return
 
+# wip
 def get_weighted_counter(linked, weight=2):
     counter = {}
     for literal, clauses in linked.items():
@@ -104,15 +114,27 @@ def get_weighted_counter(linked, weight=2):
                         counter[literal] = weight ** - len(clause[0])
     return counter
 
+def get_weighted_abs_counter(linked, weight=2):
+    counter = {}
+    for literal, clauses in linked.items():
+        for clause in clauses:
+            if clause[1]:
+                if literal or -literal in clause[0]:
+                    if abs(literal) in counter:
+                        counter[abs(literal)] += weight ** - len(clause[0])
+                    else:
+                        counter[abs(literal)] = weight ** - len(clause[0])
+    return counter
+
 
 def pure_literal(formula):
     pures = []
 
-    # TODO
-    for literal in formula.linked.keys():
-        if -literal not in formula.linked:
-            pures.append(literal)
-
+    for literal in formula.linked:
+        if literal not in formula.assignment and -literal not in formula.assignment:
+            if -literal not in formula.linked \
+                    or not Formula.filter_active_clauses(formula.linked[-literal]):
+                pures.append(literal)
     for pure in pures:
         formula.extra_restores += 1
         formula.assignment.append(pure)
@@ -121,7 +143,7 @@ def pure_literal(formula):
 
 def unit_propagation(formula):
     unit_clauses = [c[0] for c in formula.active_clauses() if len(c[0]) == 1]
-    while len(unit_clauses) > 0:
+    while unit_clauses:
         unit = unit_clauses[0]
         bcp(formula, unit[0])
         formula.extra_restores += 1
@@ -133,9 +155,9 @@ def unit_propagation(formula):
 
 
 def backtracking(formula, selection_heuristic):
-    pure_literal(formula)
+    # pure_literal(formula)
     unit_propagation(formula)
-
+    # print formula.assignment
     if len(list(set(formula.assignment))) != len(formula.assignment):
         sys.exit("Error")
 
@@ -172,7 +194,8 @@ def backtracking(formula, selection_heuristic):
 
 def heuristics_dict(heuristic):
     heuristics = {
-        'JW': jeroslow_wang,
+        'JW'    : jeroslow_wang,
+        'JW2S'  : jeroslow_wang_2_sided
     }
     try:
         return heuristics[heuristic]
@@ -183,9 +206,18 @@ def heuristics_dict(heuristic):
 
 def jeroslow_wang(formula):
     counter = get_weighted_counter(formula.linked)
+    #return max(counter, key=counter.get)
+    return max_value_key(counter)
+
+def jeroslow_wang_2_sided(formula):
+    counter = get_weighted_abs_counter(formula.linked)
+    print str(max(counter, key=counter.get)) + ' - ' + str(max(counter.values()))
     return max(counter, key=counter.get)
 
-
+def max_value_key(counter):
+    values=list(counter.values())
+    keys=list(counter.keys())
+    return keys[values.index(max(values))]
 # Main
 
 def main():

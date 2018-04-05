@@ -61,7 +61,7 @@ def unit_propagation(formula):
     return formula, assignment
 
 
-def backtracking(formula, assignment, heuristic):
+def backtracking(formula, assignment):
 
     formula, unit_assignment = unit_propagation(formula)
     assignment = assignment + unit_assignment
@@ -70,7 +70,7 @@ def backtracking(formula, assignment, heuristic):
     if not formula:
         return assignment
 
-    variable = heuristic(formula)
+    variable = jeroslow_wang_2_sided(formula)
     solution = backtracking(bcp(formula, variable), assignment + [variable], heuristic)
     if not solution:
         solution = backtracking(bcp(formula, -variable), assignment + [-variable], heuristic)
@@ -90,9 +90,8 @@ def jeroslow_wang_2_sided(formula):
 
 def main():
 
-    # clauses, n_vars = parse(sys.argv[1])
-    clauses, n_vars = parse("../benchmarks/hard/all/CBS_k3_n100_m429_b90_671.cnf")
-    solution = backtracking(clauses, [], jeroslow_wang_2_sided)
+    clauses, n_vars = parse(sys.argv[1])
+    solution = backtracking(clauses, [])
 
     if solution:
         solution += [x for x in range(1, n_vars + 1) if x not in solution and -x not in solution]

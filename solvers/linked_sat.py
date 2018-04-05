@@ -133,7 +133,6 @@ def unit_propagation(formula):
 
 
 def backtracking(formula, selection_heuristic):
-    print formula.assignment
     pure_literal(formula)
     unit_propagation(formula)
 

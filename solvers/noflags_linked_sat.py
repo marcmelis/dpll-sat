@@ -160,8 +160,8 @@ def jeroslow_wang_2_sided(formula):
 def main():
 
 
-    #formula = parse(sys.argv[1])
-    formula = parse("../benchmarks/hard/all/CBS_k3_n100_m429_b90_891.cnf")
+    formula = parse(sys.argv[1])
+
     solution = backtracking(formula)
 
     if solution:

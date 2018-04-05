@@ -77,10 +77,6 @@ def backtracking(formula, assignment):
 
     return solution
 
-def random_selection(formula):
-    counter = get_counter(formula)
-    return random.choice(counter.keys())
-
 def jeroslow_wang_2_sided(formula):
     counter = get_weighted_abs_counter(formula)
     return max(counter, key=counter.get)

@@ -14,16 +14,17 @@ Solvers list:
 * original_dpll.py : base solver, random selection
 * base_sat.py : solver with more branching heuristics
 * linked_sat.py : solver with linked list structure (only with JW branching heuristic)
+* race_sat.py : base_solver with 2 sided jeroslow wang branching heuristic
+* noflags_linked_sat.py : faster version of linked_sat.py without flags
 
 ### base_sat branching heuristics
-* **FRE** *(Freeman) : counts both the number of positive l and negative -l occurrences of a given variable l.
+* **FRE** (Freeman) : counts both the number of positive l and negative -l occurrences of a given variable l.
 * **RAN** (Random) : random selectionrm
 * **MO** (Most often) : counts the occurrences of each l literal
 * **JW** (Jeroslow Wang) : let C be the set of open clauses containing a single polarity of a given variable l. Then to the given variable l a weight of the summation of 2^(length of c) for each c ∈ C.
 * **JW2S** (2 sided Jeroslow Wang) : Jeroslow Wang but C contains either polarity of a given variable.
 * **SPC** (Shortest Positive Clause) : searches for the shortest clause with all literals positive.
 
-\**not working*
 
 ## Utils
 ### Formula generator
@@ -47,7 +48,7 @@ $ ./utils/test_benchmarks.sh <benchmark_folder> <solver_name> *[<heurisitc>]
 Example:
 ```
 $ chmod +x test_benchmarks.sh
-$ ./utils/test_benchmarks.sh benchmark/dubois base_sat.py JW2S
+$ ./utils/test_benchmarks.sh benchmark/dubois solvers/base_sat.py JW2S
 ```
 
 ### Solution validator

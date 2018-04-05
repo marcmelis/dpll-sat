@@ -105,8 +105,18 @@ def get_weighted_counter(linked, weight=2):
     return counter
 
 
-def pure_literal(formula, linked):
-    pass
+def pure_literal(formula):
+    pures = []
+
+    # TODO
+    for literal in formula.linked.keys():
+        if -literal not in formula.linked:
+            pures.append(literal)
+
+    for pure in pures:
+        formula.extra_restores += 1
+        formula.assignment.append(pure)
+        bcp(formula, pure)
 
 
 def unit_propagation(formula):
@@ -123,8 +133,8 @@ def unit_propagation(formula):
 
 
 def backtracking(formula, selection_heuristic):
-
-    # pure_literal(formula)
+    print formula.assignment
+    pure_literal(formula)
     unit_propagation(formula)
 
     if len(list(set(formula.assignment))) != len(formula.assignment):

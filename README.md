@@ -12,7 +12,8 @@ $ python <solver_name> <formula_to_solve> *[<branching_heuristic>]
 Solvers list:
 * solver_exp.py : experimental solver (too slow and not working)
 * original_dpll.py : base solver, random selection
-* base_sat.py : fast solver with more branching heuristics
+* base_sat.py : solver with more branching heuristics
+* linked_sat.py : solver with linked list structure (only with JW branching heuristic)
 
 ### base_sat branching heuristics
 * **FRE** *(Freeman) : counts both the number of positive l and negative -l occurrences of a given variable l.

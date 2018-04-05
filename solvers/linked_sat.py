@@ -126,7 +126,7 @@ def get_weighted_abs_counter(linked, weight=2):
                         counter[abs(literal)] = weight ** - len(clause[0])
     return counter
 
-
+# wip
 def pure_literal(formula):
     pures = []
 
@@ -157,7 +157,6 @@ def unit_propagation(formula):
 def backtracking(formula, selection_heuristic):
     # pure_literal(formula)
     unit_propagation(formula)
-    # print formula.assignment
     if len(list(set(formula.assignment))) != len(formula.assignment):
         sys.exit("Error")
 
@@ -206,18 +205,12 @@ def heuristics_dict(heuristic):
 
 def jeroslow_wang(formula):
     counter = get_weighted_counter(formula.linked)
-    #return max(counter, key=counter.get)
-    return max_value_key(counter)
+    return max(counter, key=counter.get)
 
 def jeroslow_wang_2_sided(formula):
     counter = get_weighted_abs_counter(formula.linked)
-    print str(max(counter, key=counter.get)) + ' - ' + str(max(counter.values()))
     return max(counter, key=counter.get)
 
-def max_value_key(counter):
-    values=list(counter.values())
-    keys=list(counter.keys())
-    return keys[values.index(max(values))]
 # Main
 
 def main():

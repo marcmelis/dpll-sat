@@ -118,9 +118,6 @@ def backtracking(formula):
 
     unit_propagation(formula)
 
-    if len(list(set(formula.assignment))) != len(formula.assignment):
-        sys.exit("Error")
-
     if formula.has_contradiction:
         formula.has_contradiction = False
         return []

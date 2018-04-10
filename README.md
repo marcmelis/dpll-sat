@@ -47,7 +47,7 @@ $ ./utils/test_benchmarks.sh <benchmark_folder> <solver_name> *[<heurisitc>]
 
 Example:
 ```
-$ chmod +x test_benchmarks.sh
+$ chmod +x utils/test_benchmarks.sh
 $ ./utils/test_benchmarks.sh benchmark/dubois solvers/base_sat.py JW2S
 ```
 

@@ -1,5 +1,6 @@
 # satsolver_practice
-Simple COMPLETE SAT Solver.
+Simple COMPLETE SAT Solver. \
+You can find a copy of this repository at https://github.com/markankaro/satsolver_practice. 
 
 ## Solvers
 

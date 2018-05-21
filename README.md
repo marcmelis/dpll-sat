@@ -1,4 +1,4 @@
-# satsolver_practice
+# Complete SAT Solver Practice
 Simple COMPLETE SAT Solver. \
 You can find a copy of this repository at https://github.com/markankaro/satsolver_practice. 
 
